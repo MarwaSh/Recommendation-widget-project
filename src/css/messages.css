@@ -1,0 +1,26 @@
+.error-message, .no-recommendations {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+}
+.error-message {
+    color: #D8000C;
+    background-color: #FFD2D2;
+    border: 1px solid #D8000C;
+}
+.no-recommendations {
+    color: #717171;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*Add before the mno recommendation message*/
+.no-recommendations:before {
+    content: "💡";  
+    margin-right: 8px;
+}

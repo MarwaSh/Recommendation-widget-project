@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+    #recommendation-widget {
+        margin: 10px;
+        padding: 10px;
+    }
+    .recommendation-item h3 {
+        font-size: 1.2em;
+    }
+    .recommendation-item p {
+        font-size: 1em;
+    }
+    .recommendation-item img {
+        width: 100%;
+    }
+}

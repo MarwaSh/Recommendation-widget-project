@@ -1,0 +1,23 @@
+.recommendation-item {
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.recommendation-item:hover {
+    transform: scale(1.05);
+}
+
+.recommendation-item.sponsored {
+    background-color: #f0f0f5; /* Light background for sponsored items */
+    border-left: 4px solid #007bff; /* Highlight color */
+}
+
+.recommendation-item.organic {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
