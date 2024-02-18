@@ -101,9 +101,6 @@ function createImageElement(item) {
     imgElement.alt = item.name;
     imgElement.loading = "lazy";  // Implement lazy loading for images to improve performance
     imgElement.src = item.thumbnail[0].url;
-    //img.Error() {
-        //return callback(new Error(""));
-    //}
     // Adjust srcset and sizes to ensure responsive and appropriately sized images
     imgElement.srcset = item.thumbnail.map((t, index) => `${t.url} ${300 * (index + 1)}w`).join(', ');
     imgElement.sizes = "(max-width: 600px) 100vw, (max-width: 900px) 50vw, 25vw";
