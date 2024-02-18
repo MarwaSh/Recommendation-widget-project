@@ -15,7 +15,7 @@ These functions work together to dynamically generate and update the content of 
 */
 
 import { isValidItems, isValidItem } from './validation.js';
-import { displayErrorMessage, displayNoRecommendationsMessage } from './messages.js';
+import { displayLoadingIndicator, displayErrorMessage, displayNoRecommendationsMessage } from './messages.js';
 
 function displayRecommendations(items) {
     const container = document.getElementById('recommendation-widget');
@@ -25,6 +25,7 @@ function displayRecommendations(items) {
         return;
     }
     
+    displayLoadingIndicator(true);
     items.forEach(item => {
         if (isValidItem(item)) {
             const recommendationElement = createRecommendationElement(item);
@@ -33,39 +34,65 @@ function displayRecommendations(items) {
             console.log('Skipping item due to missing required fields', item);
         }
     });
+    displayLoadingIndicator(false);
 }
 
 // Creates a recommendation element based on the item's data.
 function createRecommendationElement(item) {
+    // Create the main container element for the recommendation
     const element = document.createElement('div');
     element.className = `recommendation-item ${item.origin}`;
 
-    const imgElement = createImageElement(item);
+    // Create and append the image element
+    const imgElement = createImageElement(item); // Assuming createImageElement is defined elsewhere
     element.appendChild(imgElement);
 
-    const sponsoredText = getSponsoredText(item);
-    const descriptionText = getDescriptionText(item);
+    const sponsoredTextContent = getSponsoredText(item); // This should return a string or null/undefined if not applicable
+    const descriptionTextContent = getDescriptionText(item); // This should return a string
 
-    const contentHtml = `
-        <div>
-            <h3>${item.name}</h3>
-            ${sponsoredText}
-        </div>
-        ${descriptionText}
-        <a href="${item.url}" target="${item.origin === 'sponsored' ? '_blank' : '_self'}">Read More</a>`;
-    element.innerHTML += contentHtml;
+    // Create container for name and possibly sponsored text
+    const container = document.createElement('div');
+    
+    // Create and append the name element (h3)
+    const nameElement = document.createElement('h3');
+    nameElement.textContent = item.name;
+    container.appendChild(nameElement);
+
+    // Check and append sponsored text if applicable
+    if (sponsoredTextContent) {
+        const sponsoredElement = document.createElement('p');
+        sponsoredElement.textContent = sponsoredTextContent;
+        sponsoredElement.className = 'sponsored-text'; // Example class, adjust as needed
+        container.appendChild(sponsoredElement);
+    }
+
+    element.appendChild(container);
+
+    // Append description text if applicable
+    if (descriptionTextContent) {
+        const descriptionElement = document.createElement('p');
+        descriptionElement.textContent = descriptionTextContent;
+        element.appendChild(descriptionElement);
+    }
+
+    // Create and append the "Read More" link
+    const readMoreLink = document.createElement('a');
+    readMoreLink.href = item.url; // Using .href is a shorthand for setAttribute('href', url)
+    readMoreLink.target = item.origin === 'sponsored' ? '_blank' : '_self';
+    readMoreLink.textContent = 'Read More';
+    element.appendChild(readMoreLink);
 
     return element;
 }
 
 //Generates HTML for the sponsored text, if applicable.
 function getSponsoredText(item) {
-    return item.origin === 'sponsored' && item.branding ? `<span class="source">Sponsored by ${item.branding}</span>` : '';
+    return item.origin === 'sponsored' && item.branding ? `Sponsored by ${item.branding}` : '';
 }
 
 //Generates HTML for the item description.
 function getDescriptionText(item) {
-    return item.description ? `<p>${item.description}</p>` : '';
+    return item.description ? `${item.description}` : '';
 }
 
 //Creates an image element for the recommendation item.
@@ -74,6 +101,9 @@ function createImageElement(item) {
     imgElement.alt = item.name;
     imgElement.loading = "lazy";  // Implement lazy loading for images to improve performance
     imgElement.src = item.thumbnail[0].url;
+    //img.Error() {
+        //return callback(new Error(""));
+    //}
     // Adjust srcset and sizes to ensure responsive and appropriately sized images
     imgElement.srcset = item.thumbnail.map((t, index) => `${t.url} ${300 * (index + 1)}w`).join(', ');
     imgElement.sizes = "(max-width: 600px) 100vw, (max-width: 900px) 50vw, 25vw";

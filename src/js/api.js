@@ -8,7 +8,6 @@ The api.js file is designed for managing API requests to fetch recommendation da
 */
 
 import { displayRecommendations } from './ui.js';
-import { displayLoadingIndicator, displayErrorMessage } from './messages.js';
 
 
 function fetchRecommendations() { 
@@ -23,8 +22,6 @@ function fetchRecommendations() {
         //'http://www.site.com/videos/214321562187.html'
         //'https://www.usatoday.com/story/news/politics/onpolitics/2016/06/20/hillary-clinton-built-big-stockpile-showdown-donald-trump/86161596/'     
     });
-
-    displayLoadingIndicator(true);
 
     fetch(`${endpoint}?${params}`, { method: 'GET'})
     .then(response => {
@@ -43,9 +40,6 @@ function fetchRecommendations() {
         console.error('There was a problem with your fetch operation:', error);
         displayErrorMessage(error.message);
     })
-    .finally(() => {
-        displayLoadingIndicator(false);
-    });
 }
 
 export { fetchRecommendations };
